@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <!-- install axios -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script>
+      const SERVER = "http://127.0.0.1:8000/products";
+
+      // get data from server
+      const getData = async () => {
+        // GET request for remote image in node.js
+        let myRes;
+        await axios.get(SERVER).then((res) => (myRes = res.data));
+        display.innerHTML = myRes
+          .map(
+            (i, ind) =>
+              `<div> ${i.price}    ${i.desc} <button onclick=delData(${i.id})>Del</button> </div>`
+          )
+          .join("");
+      };
+
+      // add data to the server
+      const addData = async () => {
+        // build data
+        const data = {
+          desc: desc.value,
+          price: price.value,
+        };
+
+        axios.post(SERVER, data);
+      };
+
+      //   delete data from server
+      const delData = async (id) => {
+        await axios.delete(SERVER + id);
+        getData(); //update display
+      };
+    </script>
+    <button onclick="getData();">Show Data</button>
+    <button onclick="addData();">add Data</button>
+    <hr />
+    Desc:<input id="desc" /> Price:<input id="price" />
+    <div id="display"></div>
+  </body>
+</html>
